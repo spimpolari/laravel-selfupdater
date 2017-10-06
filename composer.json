@@ -1,5 +1,5 @@
 {
-  "name": "spimpolari/laravel-selfupdater",
+  "name": "codedge/laravel-selfupdater",
   "description": "Providing an auto-updating functionality for your self-hosted Laravel application.",
   "license": "MIT",
   "keywords": [
@@ -13,8 +13,8 @@
     "self-hosted laravel application"
   ],
   "support": {
-    "issues": "https://github.com/spimpolari/laravel-selfupdater/issues",
-    "source": "https://github.com/spimpolari/laravel-selfupdater"
+    "issues": "https://github.com/codedge/laravel-selfupdater/issues",
+    "source": "https://github.com/codedge/laravel-selfupdater"
   },
   "authors": [
     {
@@ -26,12 +26,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "spimpolari\\Updater\\": "src/"
+      "codedge\\Updater\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "spimpolari\\Updater\\Tests\\": "tests/"
+      "codedge\\Updater\\Tests\\": "tests/"
     }
   },
   "require": {
