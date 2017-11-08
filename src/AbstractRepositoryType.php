@@ -36,7 +36,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
+    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true)
     {
         if (empty($file) || ! File::exists($file)) {
             throw new \InvalidArgumentException("Archive [{$file}] cannot be found or is empty.");
@@ -71,7 +71,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function hasCorrectPermissionForUpdate() : bool
+    protected function hasCorrectPermissionForUpdate()
     {
         if (! $this->pathToUpdate) {
             throw new \Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
@@ -111,7 +111,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function isSourceAlreadyFetched($version) : bool
+    protected function isSourceAlreadyFetched($version)
     {
         $storagePath = $this->config['download_path'].'/'.$version;
         if (! File::exists($storagePath) || empty(File::directories($storagePath))
@@ -128,7 +128,7 @@ abstract class AbstractRepositoryType
      * @param string $path    Path where the update should be run into
      * @param array  $exclude List of folder names that shall not be updated
      */
-    protected function setPathToUpdate(string $path, array $exclude)
+    protected function setPathToUpdate($path, array $exclude)
     {
         $finder = (new Finder())->in($path)->exclude($exclude);
 
@@ -146,7 +146,7 @@ abstract class AbstractRepositoryType
         $subDirName = File::directories($storagePath);
         $directories = File::directories($subDirName[0]);
 
-        File::makeDirectory($storagePath.'/'.$releaseName);
+        File::makeDirectory($storagePath.'/'.$releaseName, 493, true, true);
 
         foreach ($directories as $directory) { /* @var string $directory */
             File::moveDirectory($directory, $storagePath.'/'.$releaseName.'/'.File::name($directory));

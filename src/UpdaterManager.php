@@ -2,12 +2,14 @@
 
 namespace Codedge\Updater;
 
+use App\Geco\Classes\GitLabRepositoryType;
 use Closure;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+
 
 /**
  * Updater.php.
@@ -51,9 +53,9 @@ class UpdaterManager implements UpdaterContract
      *
      * @return SourceRepository
      */
-    public function source($name = '') : SourceRepository
+    public function source($name = '')
     {
-        $name = $name ?: $this->getDefaultSourceRepository();
+        $name = ! empty($name) ? $name : $this->getDefaultSourceRepository();
 
         return $this->sources[$name] = $this->get($name);
     }
@@ -65,7 +67,8 @@ class UpdaterManager implements UpdaterContract
      */
     public function getDefaultSourceRepository()
     {
-        return $this->app['config']['self-update']['default'];
+        //return $this->app['config']['self-update']['default'];
+        return  config('self-update.default');
     }
 
     /**
@@ -88,7 +91,7 @@ class UpdaterManager implements UpdaterContract
      */
     public function extend($source, Closure $callback)
     {
-        $this->customRepositoryTypes[$source] = $callback;
+        $this->customSourceCreators[$source] = $callback;
 
         return $this;
     }
@@ -115,7 +118,7 @@ class UpdaterManager implements UpdaterContract
      */
     protected function getConfig($name)
     {
-        return $this->app['config']['self-update']['repository_types'][$name];
+        return config('self-update.repository_types.'.$name);
     }
 
     /**
@@ -135,7 +138,7 @@ class UpdaterManager implements UpdaterContract
      *
      * @param string $name
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return mixed
      */
@@ -144,18 +147,18 @@ class UpdaterManager implements UpdaterContract
         $config = $this->getConfig($name);
 
         if (is_null($config)) {
-            throw new InvalidArgumentException("Source repository [{$name}] is not defined.");
+            throw new \InvalidArgumentException("Source repository [{$name}] is not defined.");
         }
 
-        if (isset($this->customSourceCreators[$config['type']])) {
-            return $this->callCustomSourceCreators($config);
-        }
+//        if (isset($this->customSourceCreators[$config['type']])) {
+//            return $this->callCustomSourceCreators($config);
+//        }
         $repositoryMethod = 'create'.ucfirst($name).'Repository';
 
         if (method_exists($this, $repositoryMethod)) {
             return $this->{$repositoryMethod}($config);
         }
-        throw new InvalidArgumentException("Repository [{$name}] is not supported.");
+        throw new \InvalidArgumentException("Repository [{$name}] is not supported.");
     }
 
     /**
@@ -171,6 +174,16 @@ class UpdaterManager implements UpdaterContract
 
         return $this->sourceRepository(new GithubRepositoryType($client, $config));
     }
+
+
+    protected function createGitlabRepository(array $config)
+    {
+        $client = new Client();
+
+        return $this->sourceRepository(new GitLabRepositoryType($client, $config));
+    }
+
+
 
     /**
      * Call a custom source repository type.

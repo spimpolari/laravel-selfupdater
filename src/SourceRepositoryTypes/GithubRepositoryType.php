@@ -52,7 +52,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = '')
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
@@ -105,7 +105,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $storageFilename = "{$release->name}.zip";
 
         if (! $this->isSourceAlreadyFetched($release->name)) {
-            $storageFile = $storagePath.$storageFilename;
+            $storageFile = $storagePath.DIRECTORY_SEPARATOR.$storageFilename;
             $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
 
             $this->unzipArchive($storageFile, $storagePath);
@@ -120,7 +120,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function update($version = '') : bool
+    public function update($version = '')
     {
         $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
 
@@ -172,7 +172,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = '')
     {
         return $prepend.$this->config['version_installed'].$append;
     }
@@ -186,7 +186,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = '')
     {
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
@@ -223,7 +223,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function versionFileExists() : bool
+    protected function versionFileExists()
     {
         return Storage::exists(static::NEW_VERSION_FILE);
     }
@@ -235,7 +235,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function setVersionFile(string $content) : bool
+    protected function setVersionFile($content)
     {
         return Storage::put(static::NEW_VERSION_FILE, $content);
     }
@@ -245,7 +245,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    protected function getVersionFile() : string
+    protected function getVersionFile()
     {
         return Storage::get(static::NEW_VERSION_FILE);
     }
@@ -255,7 +255,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function deleteVersionFile() : bool
+    protected function deleteVersionFile()
     {
         return Storage::delete(static::NEW_VERSION_FILE);
     }

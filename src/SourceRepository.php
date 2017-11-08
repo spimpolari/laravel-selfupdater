@@ -37,7 +37,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function fetch($version = '')
     {
-        $version = $version ?: $this->getVersionAvailable();
+        $version = ! empty($version) ? $version : $this->getVersionAvailable();
 
         return $this->sourceRepository->fetch($version);
     }
@@ -50,9 +50,9 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function update($version = '', $forceFetching = true) : bool
+    public function update($version = '', $forceFetching = true)
     {
-        $version = $version ?: $this->getVersionAvailable();
+        $version = ! empty($version) ? $version : $this->getVersionAvailable();
 
         if ($forceFetching) {
             $this->fetch($version);
@@ -72,7 +72,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = '')
     {
         return $this->sourceRepository->isNewVersionAvailable($currentVersion);
     }
@@ -86,7 +86,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = '')
     {
         return $this->sourceRepository->getVersionInstalled($prepend, $append);
     }
@@ -100,7 +100,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = '')
     {
         return $this->sourceRepository->getVersionAvailable($prepend, $append);
     }
