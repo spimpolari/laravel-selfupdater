@@ -26,12 +26,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "codedge\\Updater\\": "src/"
+      "Codedge\\Updater\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "codedge\\Updater\\Tests\\": "tests/"
+      "Codedge\\Updater\\Tests\\": "tests/"
     }
   },
   "require": {
